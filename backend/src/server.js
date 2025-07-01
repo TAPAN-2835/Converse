@@ -30,12 +30,12 @@ app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
 // Serve static files from frontend/dist
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // Catch-all: send index.html for any other route (for React Router)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-});
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  });
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

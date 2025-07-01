@@ -4,7 +4,7 @@ import { BellIcon, HomeIcon, MessagesSquare, UsersIcon } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getFriendRequests, getUnseenMessagesPerUser } from "../lib/api";
 
-const Sidebar = () => {
+const Sidebar = ({ className = "", onNavigate }) => {
   const { authUser } = useAuthUser();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -26,13 +26,14 @@ const Sidebar = () => {
   const hasUnseenMessages = Object.values(unseenMessagesPerUser).some(count => count > 0);
 
   return (
-    <aside className="w-64 bg-base-200 border-r border-base-300 hidden lg:flex flex-col h-[calc(100vh-4rem)] sticky top-16">
+    <aside className={`w-64 bg-base-200 border-r border-base-300 flex flex-col h-[calc(100vh-4rem)] sticky top-16 ${className}`}>
       <nav className="flex-1 p-4 space-y-1">
         <Link
           to="/"
           className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case text-base ${
             currentPath === "/" ? "btn-active" : ""
           }`}
+          onClick={onNavigate}
         >
           <HomeIcon className="size-5 text-base-content opacity-70" />
           <span>Home</span>
@@ -43,6 +44,7 @@ const Sidebar = () => {
           className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case text-base relative ${
             currentPath === "/friends" ? "btn-active" : ""
           }`}
+          onClick={onNavigate}
         >
           <UsersIcon className="size-5 text-base-content opacity-70" />
           <span>Friends</span>
@@ -56,6 +58,7 @@ const Sidebar = () => {
           className={`btn btn-ghost justify-start w-full gap-3 px-3 normal-case text-base relative ${
             currentPath === "/notifications" ? "btn-active" : ""
           }`}
+          onClick={onNavigate}
         >
           <BellIcon className="size-5 text-base-content opacity-70" />
           <span>Notifications</span>

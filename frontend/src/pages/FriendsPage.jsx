@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUserFriends, getRecommendedUsers, sendFriendRequest, getUnseenMessagesPerUser } from "../lib/api";
 import { Link } from "react-router-dom";
-import TechyBg from "../components/TechyBg";
+
 const FriendsPage = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");

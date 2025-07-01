@@ -41,7 +41,7 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full border-t border-base-300 py-4 px-2 flex flex-col items-center gap-2 mt-auto bg-base-200 text-base-content transition-colors duration-300">
+    <footer className="w-full border-t border-base-300 py-4 px-2 flex flex-col items-center gap-2 mt-auto bg-base-100 text-base-content transition-colors duration-300">
       <span className="font-logo text-2xl mb-1" style={{ fontFamily: 'Pacifico, cursive', letterSpacing: '2px' }}>
         Converse
       </span>
