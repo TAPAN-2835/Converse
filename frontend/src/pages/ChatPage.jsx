@@ -96,7 +96,7 @@ const ChatPage = () => {
 
   return (
     <div className="h-[93vh]">
-      <Chat client={chatClient}>
+      <Chat client={chatClient} className="custom-chat-bg">
         <Channel channel={channel}>
           <div className="w-full relative">
             <CallButton handleVideoCall={handleVideoCall} />

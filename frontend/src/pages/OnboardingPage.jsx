@@ -22,6 +22,9 @@ const OnboardingPage = () => {
     profilePic: authUser?.profilePic || "",
   });
 
+  // Detect edit mode: if user is onboarded, treat as edit
+  const isEditMode = !!authUser?.isOnboarded;
+
   const { mutate: onboardingMutation, isPending } = useMutation({
     mutationFn: completeOnboarding,
     onSuccess: () => {
@@ -116,7 +119,7 @@ const OnboardingPage = () => {
                   onChange={(e) => setFormState({ ...formState, fullName: e.target.value })}
                   className="input input-bordered w-full"
                   placeholder="Your full name"
-                  required
+                  required={!isEditMode}
                 />
               </div>
               {/* BIO */}
@@ -130,7 +133,7 @@ const OnboardingPage = () => {
                   onChange={(e) => setFormState({ ...formState, bio: e.target.value })}
                   className="textarea textarea-bordered h-20 md:h-24"
                   placeholder="Tell others about yourself and what you love to chat about!"
-                  required
+                  required={!isEditMode}
                 />
               </div>
               {/* LOCATION */}
@@ -147,7 +150,7 @@ const OnboardingPage = () => {
                     onChange={(e) => setFormState({ ...formState, location: e.target.value })}
                     className="input input-bordered w-full pl-10"
                     placeholder="City, Country"
-                    required
+                    required={!isEditMode}
                   />
                 </div>
               </div>
@@ -156,12 +159,12 @@ const OnboardingPage = () => {
                 {!isPending ? (
                   <>
                     <MessagesSquare className="size-6 mr-2" />
-                    Complete Onboarding
+                    {isEditMode ? 'Save Changes' : 'Complete Onboarding'}
                   </>
                 ) : (
                   <>
                     <LoaderIcon className="animate-spin size-5 mr-2" />
-                    Onboarding...
+                    {isEditMode ? 'Saving...' : 'Onboarding...'}
                   </>
                 )}
               </button>

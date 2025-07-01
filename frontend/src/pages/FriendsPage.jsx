@@ -57,12 +57,14 @@ const FriendsPage = () => {
     let filtered = allUsers.filter(user =>
       (user.fullName || "").toLowerCase().includes(search.toLowerCase())
     );
-    // Sort: online first (alphabetical), then offline (alphabetical)
+    // Sort: friends first (alphabetical), then non-friends (alphabetical)
     filtered.sort((a, b) => {
-      if (a.online === b.online) {
-        return (a.fullName || "").localeCompare(b.fullName || "");
+      const aIsFriend = friendIds.has(a._id);
+      const bIsFriend = friendIds.has(b._id);
+      if (aIsFriend !== bIsFriend) {
+        return bIsFriend - aIsFriend; // friends first
       }
-      return b.online - a.online; // online first
+      return (a.fullName || "").localeCompare(b.fullName || "");
     });
     return filtered;
   }, [allUsers, search]);

@@ -6,6 +6,8 @@ import {
   getUserFriends,
   sendFriendRequest,
   getUnseenMessagesCount,
+  getStreamToken,
+  getUnseenMessagesPerUser,
 } from "../lib/api";
 import { Link } from "react-router-dom";
 import { CheckCircleIcon, MapPinIcon, UserPlusIcon, UsersIcon } from "lucide-react";
@@ -32,9 +34,9 @@ const HomePage = () => {
   });
 
   // Fetch unseen messages count
-  const { data: unseenMessages } = useQuery({
-    queryKey: ["unseenMessages"],
-    queryFn: getUnseenMessagesCount,
+  const { data: unseenMessagesPerUser = {} } = useQuery({
+    queryKey: ["unseenMessagesPerUser"],
+    queryFn: getUnseenMessagesPerUser,
   });
 
   const { mutate: sendRequestMutation, isPending } = useMutation({
@@ -51,6 +53,8 @@ const HomePage = () => {
       setOutgoingRequestsIds(outgoingIds);
     }
   }, [outgoingFriendReqs]);
+
+  console.log("unseenMessages (HomePage)", unseenMessagesPerUser);
 
   return (
     <div className="px-2 sm:px-3 md:px-4 lg:px-6 max-w-5xl mx-auto space-y-6 mt-3 pb-6">
@@ -70,13 +74,17 @@ const HomePage = () => {
           <NoFriendsFound />
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
-            {friends.map((friend) => (
-              <FriendCard 
-                key={friend._id} 
-                friend={friend} 
-                hasUnseenMessages={unseenMessages?.count > 0}
-              />
-            ))}
+            {friends.map((friend) => {
+              const hasUnseen = unseenMessagesPerUser?.[friend._id] > 0;
+              console.log(friend.fullName, "hasUnseenMessages:", hasUnseen);
+              return (
+                <FriendCard 
+                  key={friend._id} 
+                  friend={friend} 
+                  hasUnseenMessages={hasUnseen}
+                />
+              );
+            })}
           </div>
         )}
 

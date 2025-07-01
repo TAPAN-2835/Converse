@@ -19,6 +19,10 @@
   justify-content: center;
   background: transparent !important;
   height: 100%;
+  background-image: url('/bg-chat.png');
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
 }
 
 .str-chat__container {
@@ -61,4 +65,12 @@
 
 .animate-gradient-move {
   animation: gradientMove 12s ease-in-out infinite;
+}
+
+.custom-chat-bg {
+  background-image: url('/bg-chat.png') !important;
+  background-size: cover !important;
+  background-repeat: repeat !important;
+  background-position: center !important;
+  min-height: 300px;
 }

@@ -70,7 +70,8 @@ export async function sendMessage(req, res) {
     const newMessage = new Message({
       senderId,
       receiverId,
-      message
+      message,
+      isRead: false
     });
 
     await newMessage.save();
