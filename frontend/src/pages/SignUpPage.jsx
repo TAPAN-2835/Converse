@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { MessagesSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import useSignUp from "../hooks/useSignUp";
 import Footer from "../components/Footer";
@@ -22,19 +21,17 @@ const SignUpPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-base-100" data-theme={theme}>
-      <div className="flex-grow flex items-center justify-center">
-        <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden mt-8 mb-4">
-        {/* SIGNUP FORM - LEFT SIDE */}
-          <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col relative">
+      <div className="flex-grow flex items-center justify-center min-h-[80vh]">
+        <div className="border border-primary/10 flex flex-col w-full max-w-md mx-auto bg-base-100 rounded-3xl shadow-xl overflow-hidden my-6 md:my-10 transition-transform duration-300 hover:scale-[1.01]">
+          <div className="card-body p-5 sm:p-8 md:p-10 space-y-6">
             {/* ThemeSelector at top right of box, styled as in Navbar */}
             <div className="absolute top-4 right-4 z-10">
               <ThemeSelector />
             </div>
           {/* LOGO */}
           <div className="mb-4 flex items-center justify-start gap-2">
-              <MessagesSquare className="size-12 text-primary" />
               <span className="text-3xl font-medium" style={{ fontFamily: 'Pacifico, cursive', letterSpacing: '2px' }}>
-                Converse
+                <span className="font-aicon">Converse</span>
             </span>
           </div>
           {/* ERROR MESSAGE IF ANY */}
@@ -49,7 +46,7 @@ const SignUpPage = () => {
                 <div>
                   <h2 className="text-xl font-semibold">Create an Account</h2>
                   <p className="text-sm opacity-70">
-                      Join Converse and start chatting with friends!
+                    Join <span className="font-aicon">Converse</span> and start chatting with friends!
                   </p>
                 </div>
                 <div className="space-y-3">

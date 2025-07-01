@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuthUser from "../hooks/useAuthUser";
 import { BellIcon, LogOutIcon, MessagesSquare } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
@@ -9,6 +9,7 @@ import { getFriendRequests, getUnseenMessagesPerUser } from "../lib/api";
 const Navbar = ({ onSidebarToggle }) => {
   const { authUser } = useAuthUser();
   const { logoutMutation } = useLogout();
+  const navigate = useNavigate();
 
   // Fetch friend requests to check for pending notifications
   const { data: friendRequests } = useQuery({
@@ -28,12 +29,12 @@ const Navbar = ({ onSidebarToggle }) => {
 
   return (
     <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
-      <div className="container mx-auto px-1 sm:px-2 lg:px-2">
+      <div className="container mx-auto px-0 sm:px-0 lg:px-0">
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0">
             {/* Hamburger menu for mobile */}
             <button
-              className="btn btn-ghost btn-circle block lg:hidden"
+              className="btn btn-ghost btn-circle block lg:hidden pl-2"
               onClick={onSidebarToggle}
               aria-label="Open sidebar"
             >
@@ -41,34 +42,35 @@ const Navbar = ({ onSidebarToggle }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            {/* LOGO - Always visible and clickable */}
-            <div className="flex-shrink-0">
-              <Link to="/" className="flex items-center gap-1">
-                <MessagesSquare className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
-                <span className="text-lg sm:text-xl font-bold" style={{ fontFamily: 'Pacifico, cursive', letterSpacing: '1px' }}>
-                  Converse
-                </span>
-              </Link>
-            </div>
+          {/* LOGO - Always visible and clickable */}
+          <div className="flex-shrink-0">
+              <Link to="/" className="flex items-center gap-0">
+                <span className="text-base sm:text-xl font-bold font-aicon" style={{ letterSpacing: '1px' }}>
+                Converse
+              </span>
+            </Link>
           </div>
-          <div className="flex items-center gap-3">
-            <Link to={"/notifications"}>
-              <button className="btn btn-ghost btn-circle p-1 sm:p-2 relative">
+          </div>
+          <div className="flex items-center gap-1 justify-center">
+            <button
+              className="btn btn-ghost btn-circle p-1 sm:p-2 relative flex items-center justify-center -mr-4"
+              onClick={() => navigate('/notifications')}
+              aria-label="Notifications"
+            >
                 <BellIcon className="w-5 h-5 sm:w-6 sm:h-6 text-base-content opacity-70" />
                 {(hasNotifications || hasUnseenMessages) && (
                   <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-accent rounded-full shadow-sm"></span>
                 )}
               </button>
-            </Link>
-            <div>
-              <ThemeSelector />
+            <button className="btn btn-ghost btn-circle p-1 sm:p-2 flex items-center justify-center -mt-1" aria-label="Theme selector">
+              <span className="flex items-center justify-center w-full h-full">
+            <ThemeSelector />
+              </span>
+            </button>
+            <div className="avatar w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center" title="User Profile">
+              <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
             </div>
-            <div className="avatar" title="User Profile">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full">
-                <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
-              </div>
-            </div>
-            <button className="btn btn-ghost btn-circle p-1 sm:p-2" onClick={logoutMutation}>
+            <button className="btn btn-ghost btn-circle p-1 sm:p-2 flex items-center justify-center" onClick={logoutMutation} aria-label="Logout">
               <LogOutIcon className="w-5 h-5 sm:w-6 sm:h-6 text-base-content opacity-70" />
             </button>
           </div>

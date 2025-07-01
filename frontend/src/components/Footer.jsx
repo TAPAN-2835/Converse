@@ -42,7 +42,7 @@ const socialLinks = [
 const Footer = () => {
   return (
     <footer className="w-full border-t border-base-300 py-4 px-2 flex flex-col items-center gap-2 mt-auto bg-base-100 text-base-content transition-colors duration-300">
-      <span className="font-logo text-2xl mb-1" style={{ fontFamily: 'Pacifico, cursive', letterSpacing: '2px' }}>
+      <span className="font-logo text-2xl mb-1 font-aicon" style={{ letterSpacing: '2px' }}>
         Converse
       </span>
       <div className="flex gap-4 mb-1">
@@ -60,7 +60,7 @@ const Footer = () => {
         ))}
       </div>
       <span className="text-xs">
-        © {new Date().getFullYear()} Converse. All rights reserved.
+        © {new Date().getFullYear()} <span className="font-aicon">Converse</span>. All rights reserved.
       </span>
       <span className="text-xs opacity-100">Developed by Tapan</span>
     </footer>

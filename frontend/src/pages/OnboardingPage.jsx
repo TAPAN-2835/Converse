@@ -46,17 +46,28 @@ const OnboardingPage = () => {
     toast.success("Random profile picture generated!");
   };
 
+  // Handle image upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormState({ ...formState, profilePic: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-base-100 via-base-200 to-base-300" data-theme={theme}>
-      <div className="w-full flex justify-end p-4"><ThemeSelector /></div>
-      <div className="flex-grow flex items-center justify-center">
-        <div className="border border-primary/20 flex flex-col w-full max-w-xl mx-auto bg-base-100 rounded-2xl shadow-2xl overflow-hidden mt-2 mb-2 transition-transform duration-300 hover:scale-[1.01]">
-          <div className="card-body p-4 sm:p-6 md:p-8">
-            <div className="mb-2 flex items-center justify-start gap-2">
-              <MessagesSquare className="size-10 sm:size-12 text-primary" />
+      <div className="flex-grow flex items-center justify-center min-h-[80vh]">
+        <div className="border border-primary/10 flex flex-col w-full max-w-md mx-auto bg-base-100 rounded-3xl shadow-xl overflow-hidden my-6 md:my-10 transition-transform duration-300 hover:scale-[1.01]">
+          <div className="card-body p-5 sm:p-8 md:p-10 space-y-6">
+            <div className="flex items-center justify-between mb-4">
               <span className="text-2xl sm:text-3xl font-medium" style={{ fontFamily: 'Pacifico, cursive', letterSpacing: '2px' }}>
-                Converse
+                <span className="font-aicon">Converse</span>
               </span>
+              <ThemeSelector />
             </div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-4">Complete Your Profile</h1>
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -82,6 +93,15 @@ const OnboardingPage = () => {
                     <ShuffleIcon className="size-4 mr-2" />
                     Random Avatar
                   </button>
+                  <label className="btn btn-outline btn-sm cursor-pointer">
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
                 </div>
               </div>
               {/* FULL NAME */}

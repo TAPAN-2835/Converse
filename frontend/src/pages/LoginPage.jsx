@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { MessagesSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import useLogin from "../hooks/useLogin";
 import Footer from "../components/Footer";
@@ -21,19 +20,17 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-base-100" data-theme={theme}>
-      <div className="flex-grow flex items-center justify-center">
-        <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden mt-8 mb-4">
-          {/* LOGIN FORM SECTION */}
-          <div className="w-full lg:w-1/2 p-4 sm:p-8 flex flex-col relative">
+      <div className="flex-grow flex items-center justify-center min-h-[80vh]">
+        <div className="border border-primary/10 flex flex-col w-full max-w-md mx-auto bg-base-100 rounded-3xl shadow-xl overflow-hidden my-6 md:my-10 transition-transform duration-300 hover:scale-[1.01]">
+          <div className="card-body p-5 sm:p-8 md:p-10 space-y-6">
             {/* ThemeSelector at top right of box, styled as in Navbar */}
             <div className="absolute top-4 right-4 z-10">
               <ThemeSelector />
             </div>
             {/* LOGO */}
             <div className="mb-4 flex items-center justify-start gap-2">
-              <MessagesSquare className="size-12 text-primary" />
               <span className="text-3xl font-medium" style={{ fontFamily: 'Pacifico, cursive', letterSpacing: '2px' }}>
-                Converse
+                <span className="font-aicon">Converse</span>
               </span>
             </div>
 
@@ -105,23 +102,6 @@ const LoginPage = () => {
                   </div>
                 </div>
               </form>
-            </div>
-          </div>
-
-          {/* IMAGE SECTION */}
-          <div className="hidden lg:flex w-full lg:w-1/2 bg-primary/10 items-center justify-center">
-            <div className="max-w-md p-8">
-              {/* Illustration */}
-              <div className="relative aspect-square max-w-sm mx-auto">
-                <img src="/i.png" alt="Chatting illustration" className="w-full h-full" />
-              </div>
-
-              <div className="text-center space-y-3 mt-6">
-                <h2 className="text-xl font-semibold">Connect with friends worldwide</h2>
-                <p className="opacity-70">
-                  Chat, make friends, and have fun conversations together!
-                </p>
-              </div>
             </div>
           </div>
         </div>
