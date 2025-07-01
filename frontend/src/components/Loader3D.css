@@ -1,0 +1,65 @@
+.loader3d-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+}
+
+.loader3d {
+  perspective: 800px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cube {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: spinCube 1.5s infinite linear;
+}
+
+.face {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #00eaff 0%, #0051ff 100%);
+  opacity: 0.85;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #00eaff88, 0 0 40px #0051ff44;
+}
+
+.face.front  { transform: rotateY(  0deg) translateZ(30px); }
+.face.back   { transform: rotateY(180deg) translateZ(30px); }
+.face.right  { transform: rotateY( 90deg) translateZ(30px); }
+.face.left   { transform: rotateY(-90deg) translateZ(30px); }
+.face.top    { transform: rotateX( 90deg) translateZ(30px); }
+.face.bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+@keyframes spinCube {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+.loader3d-text {
+  margin-top: 1.5rem;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  font-size: 1.25rem;
+  color: #00eaff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px #0051ff88;
+}
+
+@media (max-width: 600px) {
+  .loader3d, .cube, .face {
+    width: 40px;
+    height: 40px;
+  }
+  .face {
+    border-radius: 6px;
+  }
+} 
