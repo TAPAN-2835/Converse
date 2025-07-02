@@ -96,7 +96,7 @@ const OnboardingPage = () => {
     setCropData({ x: 0, y: 0, scale: 1 });
   };
 
-  // Apply crop and close cropper
+  // Apply crop and close cropper - WhatsApp style
   const handleApplyCrop = () => {
     if (!imageRef.current || !containerRef.current) return;
 
@@ -108,56 +108,34 @@ const OnboardingPage = () => {
 
     const img = new Image();
     img.onload = () => {
-      // Container size (256x256)
-      const containerSize = 256;
+      // Get the actual displayed image element
+      const displayedImg = imageRef.current;
+      const container = containerRef.current;
       
-      // Calculate how the image is displayed with object-cover
-      const imgAspectRatio = img.width / img.height;
-      const containerAspectRatio = 1; // square container
+      // Get the actual dimensions and position of the displayed image
+      const imgRect = displayedImg.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
       
-      let displayWidth, displayHeight, offsetX, offsetY;
+      // Calculate the scale factor between displayed and original image
+      const scaleX = img.width / imgRect.width;
+      const scaleY = img.height / imgRect.height;
       
-      if (imgAspectRatio > containerAspectRatio) {
-        // Image is wider than container - height fills container, width is cropped
-        displayHeight = containerSize;
-        displayWidth = containerSize * imgAspectRatio;
-        offsetX = (displayWidth - containerSize) / 2;
-        offsetY = 0;
-      } else {
-        // Image is taller than container - width fills container, height is cropped
-        displayWidth = containerSize;
-        displayHeight = containerSize / imgAspectRatio;
-        offsetX = 0;
-        offsetY = (displayHeight - containerSize) / 2;
-      }
+      // Calculate the offset of the image relative to the container
+      const imgOffsetX = imgRect.left - containerRect.left;
+      const imgOffsetY = imgRect.top - containerRect.top;
       
-      // Calculate the scale factor between display size and original image
-      const scaleX = img.width / displayWidth;
-      const scaleY = img.height / displayHeight;
+      // Calculate the crop area (always the container size)
+      const cropSize = Math.min(containerRect.width, containerRect.height);
       
-      // Calculate the visible portion of the image in the preview
-      const visibleWidth = containerSize * scaleX;
-      const visibleHeight = containerSize * scaleY;
-      
-      // Calculate the center of the visible area in the original image
-      const centerX = img.width / 2;
-      const centerY = img.height / 2;
-      
-      // Calculate the crop area based on drag position and zoom
-      const cropSize = Math.min(visibleWidth, visibleHeight) / cropData.scale;
-      
-      // Convert drag coordinates to original image coordinates
-      const dragOffsetX = (cropData.x * scaleX) / cropData.scale;
-      const dragOffsetY = (cropData.y * scaleY) / cropData.scale;
-      
-      // Calculate the source rectangle
-      const sourceX = centerX - (cropSize / 2) + dragOffsetX;
-      const sourceY = centerY - (cropSize / 2) + dragOffsetY;
+      // Calculate the source rectangle in the original image
+      // Account for the image's position and the user's drag
+      const sourceX = (-imgOffsetX + cropData.x) * scaleX;
+      const sourceY = (-imgOffsetY + cropData.y) * scaleY;
       
       // Ensure bounds
-      const finalSourceX = Math.max(0, Math.min(sourceX, img.width - cropSize));
-      const finalSourceY = Math.max(0, Math.min(sourceY, img.height - cropSize));
-      const finalSourceSize = Math.min(cropSize, img.width - finalSourceX, img.height - finalSourceY);
+      const finalSourceX = Math.max(0, Math.min(sourceX, img.width - cropSize * scaleX));
+      const finalSourceY = Math.max(0, Math.min(sourceY, img.height - cropSize * scaleY));
+      const finalSourceSize = Math.min(cropSize * scaleX, img.width - finalSourceX, img.height - finalSourceY);
       
       // Draw the cropped image
       ctx.drawImage(
