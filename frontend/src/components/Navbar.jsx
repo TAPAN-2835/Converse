@@ -68,7 +68,7 @@ const Navbar = ({ onSidebarToggle }) => {
               </span>
             </button>
             <Link to="/onboarding" className="avatar w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center" title="Edit Profile">
-              <img src={authUser?.profilePic} alt="User Avatar" rel="noreferrer" />
+              <img src={authUser?.profilePic} alt="User Avatar" className="rounded-full object-cover" rel="noreferrer" />
             </Link>
             <button className="btn btn-ghost btn-circle p-1 sm:p-2 flex items-center justify-center" onClick={logoutMutation} aria-label="Logout">
               <LogOutIcon className="w-5 h-5 sm:w-6 sm:h-6 text-base-content opacity-70" />

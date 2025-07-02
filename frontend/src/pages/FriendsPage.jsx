@@ -102,7 +102,7 @@ const FriendsPage = () => {
                 <div className="flex items-center gap-4">
                   <div className="avatar relative">
                     <div className="w-12 rounded-full">
-                      <img src={user.profilePic || "/i.png"} alt={user.fullName} />
+                      <img src={user.profilePic || "/i.png"} alt={user.fullName} className="rounded-full object-cover" />
                     </div>
                     {hasUnseenMessages && (
                       <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full shadow-sm"></span>

@@ -123,8 +123,8 @@ const HomePage = () => {
                   >
                   <div className="card-body p-3 md:p-4 space-y-2 md:space-y-3">
                       <div className="flex items-center gap-3">
-                      <div className="avatar size-10 md:size-12 rounded-full">
-                          <img src={user.profilePic} alt={user.fullName} />
+                                              <div className="avatar size-10 md:size-12 rounded-full">
+                          <img src={user.profilePic} alt={user.fullName} className="rounded-full object-cover" />
                         </div>
 
                         <div>

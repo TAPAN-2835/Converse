@@ -72,7 +72,7 @@ const Sidebar = ({ className = "", onNavigate }) => {
       <div className="p-4 border-t border-base-300 mt-auto">
         <div className="flex items-center gap-3">
           <Link to="/onboarding" className="avatar w-10 rounded-full" title="Edit Profile">
-              <img src={authUser?.profilePic} alt="User Avatar" />
+              <img src={authUser?.profilePic} alt="User Avatar" className="rounded-full object-cover" />
           </Link>
           <div className="flex-1">
             <p className="font-semibold text-sm">{authUser?.fullName}</p>

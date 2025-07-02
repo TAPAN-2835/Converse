@@ -7,7 +7,7 @@ const FriendCard = ({ friend, hasUnseenMessages }) => (
       {/* USER INFO */}
       <div className="flex items-center gap-3 mb-3">
         <div className="avatar size-12 relative">
-          <img src={friend.profilePic} alt={friend.fullName} />
+          <img src={friend.profilePic} alt={friend.fullName} className="rounded-full object-cover" />
           {hasUnseenMessages && (
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-error rounded-full"></span>
           )}
