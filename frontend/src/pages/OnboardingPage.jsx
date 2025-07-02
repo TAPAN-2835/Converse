@@ -108,19 +108,33 @@ const OnboardingPage = () => {
 
     const img = new Image();
     img.onload = () => {
-      // Calculate crop dimensions
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const imageRect = imageRef.current.getBoundingClientRect();
+      // The container is 256x256 (w-64 h-64 = 16rem = 256px)
+      const containerSize = 256;
       
-      const cropSize = Math.min(containerRect.width, containerRect.height);
-      const imageSize = cropSize * cropData.scale;
+      // Calculate the visible area in the preview
+      const visibleSize = containerSize / cropData.scale;
       
-      const sourceX = (img.width - imageSize) / 2 - cropData.x * cropData.scale;
-      const sourceY = (img.height - imageSize) / 2 - cropData.y * cropData.scale;
+      // Calculate the center point of the visible area
+      const centerX = img.width / 2;
+      const centerY = img.height / 2;
       
+      // Calculate the offset from center based on drag position
+      const offsetX = (cropData.x / cropData.scale) * (img.width / containerSize);
+      const offsetY = (cropData.y / cropData.scale) * (img.height / containerSize);
+      
+      // Calculate the source rectangle
+      const sourceX = centerX - (visibleSize / 2) + offsetX;
+      const sourceY = centerY - (visibleSize / 2) + offsetY;
+      
+      // Ensure bounds
+      const finalSourceX = Math.max(0, Math.min(sourceX, img.width - visibleSize));
+      const finalSourceY = Math.max(0, Math.min(sourceY, img.height - visibleSize));
+      const finalSourceSize = Math.min(visibleSize, img.width - finalSourceX, img.height - finalSourceY);
+      
+      // Draw the cropped image
       ctx.drawImage(
         img,
-        sourceX, sourceY, imageSize, imageSize,
+        finalSourceX, finalSourceY, finalSourceSize, finalSourceSize,
         0, 0, size, size
       );
 
