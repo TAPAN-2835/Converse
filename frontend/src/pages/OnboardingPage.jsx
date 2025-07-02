@@ -108,28 +108,56 @@ const OnboardingPage = () => {
 
     const img = new Image();
     img.onload = () => {
-      // The container is 256x256 (w-64 h-64 = 16rem = 256px)
+      // Container size (256x256)
       const containerSize = 256;
       
-      // Calculate the visible area in the preview
-      const visibleSize = containerSize / cropData.scale;
+      // Calculate how the image is displayed with object-cover
+      const imgAspectRatio = img.width / img.height;
+      const containerAspectRatio = 1; // square container
       
-      // Calculate the center point of the visible area
+      let displayWidth, displayHeight, offsetX, offsetY;
+      
+      if (imgAspectRatio > containerAspectRatio) {
+        // Image is wider than container - height fills container, width is cropped
+        displayHeight = containerSize;
+        displayWidth = containerSize * imgAspectRatio;
+        offsetX = (displayWidth - containerSize) / 2;
+        offsetY = 0;
+      } else {
+        // Image is taller than container - width fills container, height is cropped
+        displayWidth = containerSize;
+        displayHeight = containerSize / imgAspectRatio;
+        offsetX = 0;
+        offsetY = (displayHeight - containerSize) / 2;
+      }
+      
+      // Calculate the scale factor between display size and original image
+      const scaleX = img.width / displayWidth;
+      const scaleY = img.height / displayHeight;
+      
+      // Calculate the visible portion of the image in the preview
+      const visibleWidth = containerSize * scaleX;
+      const visibleHeight = containerSize * scaleY;
+      
+      // Calculate the center of the visible area in the original image
       const centerX = img.width / 2;
       const centerY = img.height / 2;
       
-      // Calculate the offset from center based on drag position
-      const offsetX = (cropData.x / cropData.scale) * (img.width / containerSize);
-      const offsetY = (cropData.y / cropData.scale) * (img.height / containerSize);
+      // Calculate the crop area based on drag position and zoom
+      const cropSize = Math.min(visibleWidth, visibleHeight) / cropData.scale;
+      
+      // Convert drag coordinates to original image coordinates
+      const dragOffsetX = (cropData.x * scaleX) / cropData.scale;
+      const dragOffsetY = (cropData.y * scaleY) / cropData.scale;
       
       // Calculate the source rectangle
-      const sourceX = centerX - (visibleSize / 2) + offsetX;
-      const sourceY = centerY - (visibleSize / 2) + offsetY;
+      const sourceX = centerX - (cropSize / 2) + dragOffsetX;
+      const sourceY = centerY - (cropSize / 2) + dragOffsetY;
       
       // Ensure bounds
-      const finalSourceX = Math.max(0, Math.min(sourceX, img.width - visibleSize));
-      const finalSourceY = Math.max(0, Math.min(sourceY, img.height - visibleSize));
-      const finalSourceSize = Math.min(visibleSize, img.width - finalSourceX, img.height - finalSourceY);
+      const finalSourceX = Math.max(0, Math.min(sourceX, img.width - cropSize));
+      const finalSourceY = Math.max(0, Math.min(sourceY, img.height - cropSize));
+      const finalSourceSize = Math.min(cropSize, img.width - finalSourceX, img.height - finalSourceY);
       
       // Draw the cropped image
       ctx.drawImage(
