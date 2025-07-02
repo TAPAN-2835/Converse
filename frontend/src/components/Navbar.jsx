@@ -62,11 +62,7 @@ const Navbar = ({ onSidebarToggle }) => {
                   <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-accent rounded-full shadow-sm"></span>
                 )}
               </button>
-            <button className="btn btn-ghost btn-circle p-1 sm:p-2 flex items-center justify-center -mt-1" aria-label="Theme selector">
-              <span className="flex items-center justify-center w-full h-full">
             <ThemeSelector />
-              </span>
-            </button>
             <Link to="/onboarding" className="avatar w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center" title="Edit Profile">
               <img src={authUser?.profilePic} alt="User Avatar" className="rounded-full object-cover" rel="noreferrer" />
             </Link>
