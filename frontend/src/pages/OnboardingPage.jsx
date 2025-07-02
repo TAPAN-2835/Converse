@@ -49,13 +49,53 @@ const OnboardingPage = () => {
     toast.success("Random profile picture generated!");
   };
 
-  // Handle image upload
+  // Handle image upload with compression
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size must be less than 5MB");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormState({ ...formState, profilePic: reader.result });
+        // Create an image element to compress
+        const img = new Image();
+        img.onload = () => {
+          // Create canvas for compression
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          // Set maximum dimensions (800x800 for profile pics)
+          const maxSize = 800;
+          let { width, height } = img;
+          
+          if (width > height) {
+            if (width > maxSize) {
+              height = (height * maxSize) / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = (width * maxSize) / height;
+              height = maxSize;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and compress image
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with quality 0.8 (80% quality)
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          setFormState({ ...formState, profilePic: compressedDataUrl });
+          toast.success("Image uploaded and compressed successfully!");
+        };
+        img.src = reader.result;
       };
       reader.readAsDataURL(file);
     }
