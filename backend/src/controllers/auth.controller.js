@@ -39,7 +39,7 @@ export async function signup(req, res) {
       await upsertStreamUser({
         id: newUser._id.toString(),
         name: newUser.fullName,
-        image: newUser.profilePic || "",
+        ...(newUser.profilePic && !newUser.profilePic.startsWith('data:') && { image: newUser.profilePic }),
       });
       console.log(`Stream user created for ${newUser.fullName}`);
     } catch (error) {
@@ -133,7 +133,7 @@ export async function onboard(req, res) {
       await upsertStreamUser({
         id: updatedUser._id.toString(),
         name: updatedUser.fullName,
-        image: updatedUser.profilePic || "",
+        ...(updatedUser.profilePic && !updatedUser.profilePic.startsWith('data:') && { image: updatedUser.profilePic }),
       });
       console.log(`Stream user updated after onboarding for ${updatedUser.fullName}`);
     } catch (streamError) {
