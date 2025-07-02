@@ -78,11 +78,11 @@ const HomePage = () => {
               const hasUnseen = unseenMessagesPerUser?.[friend._id] > 0;
               console.log(friend.fullName, "hasUnseenMessages:", hasUnseen);
               return (
-                <FriendCard 
-                  key={friend._id} 
-                  friend={friend} 
+              <FriendCard 
+                key={friend._id} 
+                friend={friend} 
                   hasUnseenMessages={hasUnseen}
-                />
+              />
               );
             })}
           </div>

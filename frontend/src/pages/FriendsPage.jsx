@@ -64,7 +64,7 @@ const FriendsPage = () => {
       if (aIsFriend !== bIsFriend) {
         return bIsFriend - aIsFriend; // friends first
       }
-      return (a.fullName || "").localeCompare(b.fullName || "");
+        return (a.fullName || "").localeCompare(b.fullName || "");
     });
     return filtered;
   }, [allUsers, search]);
