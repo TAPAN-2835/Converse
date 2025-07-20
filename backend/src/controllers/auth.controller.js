@@ -1,6 +1,10 @@
 import { upsertStreamUser } from "../lib/stream.js";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import sendEmail from "../lib/sendEmail.js";
+import generatedOtp from "../lib/generatedOtp.js";
+import forgotPasswordTemplate from "../lib/forgotPasswordTemplate.js";
+import bcrypt from "bcryptjs";
 
 export async function signup(req, res) {
   const { email, password, fullName } = req.body;
@@ -144,5 +148,86 @@ export async function onboard(req, res) {
   } catch (error) {
     console.error("Onboarding error:", error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+export async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Email not found", error: true, success: false });
+    }
+    const otp = generatedOtp().toString();
+    const expireTime = Date.now() + 60 * 60 * 1000; // 1 hour
+    user.resetPasswordOtp = otp;
+    user.resetPasswordExpiry = new Date(expireTime);
+    await user.save();
+    let emailError = null;
+    try {
+      await sendEmail({
+        sendTo: email,
+        subject: "Streamify Password Reset OTP",
+        html: forgotPasswordTemplate({ name: user.fullName, otp }),
+      });
+    } catch (err) {
+      emailError = err.message || err;
+    }
+    return res.json({
+      message: emailError ? "OTP generated, but email not sent (see popup)" : "Check your email for the OTP.",
+      error: !!emailError,
+      success: true,
+      otp: otp // for dev/testing only
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message || error, error: true, success: false });
+  }
+}
+
+export async function verifyResetOtp(req, res) {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Provide email and otp.", error: true, success: false });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Email not found", error: true, success: false });
+    }
+    const now = new Date();
+    if (!user.resetPasswordOtp || !user.resetPasswordExpiry || user.resetPasswordExpiry < now) {
+      return res.status(400).json({ message: "OTP is expired or not set.", error: true, success: false });
+    }
+    if (otp !== user.resetPasswordOtp) {
+      return res.status(400).json({ message: "Invalid OTP.", error: true, success: false });
+    }
+    user.resetPasswordOtp = null;
+    user.resetPasswordExpiry = null;
+    await user.save();
+    return res.json({ message: "OTP verified successfully.", error: false, success: true });
+  } catch (error) {
+    return res.status(500).json({ message: error.message || error, error: true, success: false });
+  }
+}
+
+export async function resetPassword(req, res) {
+  try {
+    const { email, newPassword, confirmPassword } = req.body;
+    if (!email || !newPassword || !confirmPassword) {
+      return res.status(400).json({ message: "Provide email, newPassword, and confirmPassword.", error: true, success: false });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Email not found", error: true, success: false });
+    }
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match.", error: true, success: false });
+    }
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    return res.json({ message: "Password updated successfully.", error: false, success: true });
+  } catch (error) {
+    return res.status(500).json({ message: error.message || error, error: true, success: false });
   }
 }

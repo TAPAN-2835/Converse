@@ -1,5 +1,5 @@
 import express from "express";
-import { login, logout, onboard, signup } from "../controllers/auth.controller.js";
+import { login, logout, onboard, signup, forgotPassword, verifyResetOtp, resetPassword } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -7,6 +7,9 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-reset-otp", verifyResetOtp);
+router.post("/reset-password", resetPassword);
 
 router.post("/onboarding", protectRoute, onboard);
 

@@ -93,3 +93,18 @@ export async function markMessagesAsRead(senderId) {
   const response = await axiosInstance.put(`/chat/mark-read/${senderId}`);
   return response.data;
 }
+
+export const forgotPassword = async (data) => {
+  const response = await axiosInstance.post("/auth/forgot-password", data);
+  return response.data;
+};
+
+export const verifyResetOtp = async (data) => {
+  const response = await axiosInstance.post("/auth/verify-reset-otp", data);
+  return response.data;
+};
+
+export const resetPassword = async (data) => {
+  const response = await axiosInstance.post("/auth/reset-password", data);
+  return response.data;
+};
