@@ -36,8 +36,12 @@ const CallPage = () => {
   });
 
   useEffect(() => {
+    let callInstance = null;
+    let videoClient = null;
+    let active = true;
+
     const initCall = async () => {
-      if (!tokenData.token || !authUser || !callId) return;
+      if (!tokenData?.token || !authUser || !callId) return;
 
       try {
         console.log("Initializing Stream video client...");
@@ -48,15 +52,22 @@ const CallPage = () => {
           image: authUser.profilePic,
         };
 
-        const videoClient = new StreamVideoClient({
+        videoClient = new StreamVideoClient({
           apiKey: STREAM_API_KEY,
           user,
           token: tokenData.token,
         });
 
-        const callInstance = videoClient.call("default", callId);
+        callInstance = videoClient.call("default", callId);
 
         await callInstance.join({ create: true });
+
+        if (!active) {
+          console.log("Component unmounted during call initialization, cleaning up immediately...");
+          callInstance.leave().catch(err => console.error("Error leaving call in unmounted callback:", err));
+          videoClient.disconnectUser().catch(err => console.error("Error disconnecting client in unmounted callback:", err));
+          return;
+        }
 
         console.log("Joined call successfully");
 
@@ -66,11 +77,24 @@ const CallPage = () => {
         console.error("Error joining call:", error);
         toast.error("Could not join the call. Please try again.");
       } finally {
-        setIsConnecting(false);
+        if (active) {
+          setIsConnecting(false);
+        }
       }
     };
 
     initCall();
+
+    return () => {
+      active = false;
+      console.log("Cleaning up CallPage: Leaving call and disconnecting client...");
+      if (callInstance) {
+        callInstance.leave().catch(err => console.error("Error leaving call on unmount:", err));
+      }
+      if (videoClient) {
+        videoClient.disconnectUser().catch(err => console.error("Error disconnecting Stream video client on unmount:", err));
+      }
+    };
   }, [tokenData, authUser, callId]);
 
   if (isLoading || isConnecting) return <PageLoader />;

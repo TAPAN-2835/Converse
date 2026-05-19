@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import useAuthUser from "../hooks/useAuthUser";
-import { BellIcon, LogOutIcon, MessagesSquare } from "lucide-react";
+import { BellIcon, LogOutIcon, MessagesSquare, Search } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
 import useLogout from "../hooks/useLogout";
 import { useQuery } from "@tanstack/react-query";
 import { getFriendRequests, getUnseenMessagesPerUser } from "../lib/api";
 
-const Navbar = ({ onSidebarToggle }) => {
+const Navbar = ({ onSidebarToggle, showSidebar }) => {
   const { authUser } = useAuthUser();
   const { logoutMutation } = useLogout();
   const navigate = useNavigate();
@@ -28,20 +28,22 @@ const Navbar = ({ onSidebarToggle }) => {
   const hasUnseenMessages = Object.values(unseenMessagesPerUser).some(count => count > 0);
 
   return (
-    <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center">
-      <div className="container mx-auto px-0 sm:px-0 lg:px-0">
+    <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center px-4 sm:px-6 lg:px-8">
+      <div className="w-full">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-0">
             {/* Hamburger menu for mobile */}
-            <button
-              className="btn btn-ghost btn-circle block lg:hidden pl-2"
-              onClick={onSidebarToggle}
-              aria-label="Open sidebar"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            {showSidebar && (
+              <button
+                className="btn btn-ghost btn-circle block lg:hidden pl-2"
+                onClick={onSidebarToggle}
+                aria-label="Open sidebar"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            )}
           {/* LOGO - Always visible and clickable */}
           <div className="flex-shrink-0">
               <Link to="/" className="flex items-center gap-0">
@@ -52,6 +54,13 @@ const Navbar = ({ onSidebarToggle }) => {
           </div>
           </div>
           <div className="flex items-center gap-1 justify-center">
+            <button
+              className="btn btn-ghost btn-circle p-1 sm:p-2 relative flex items-center justify-center -mr-2"
+              onClick={() => navigate('/search')}
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 sm:w-6 sm:h-6 text-base-content opacity-70" />
+            </button>
             <button
               className="btn btn-ghost btn-circle p-1 sm:p-2 relative flex items-center justify-center -mr-4"
               onClick={() => navigate('/notifications')}

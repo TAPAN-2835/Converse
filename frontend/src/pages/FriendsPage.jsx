@@ -77,8 +77,9 @@ const FriendsPage = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-8 px-2">
-      <h2 className="text-2xl font-bold mb-6">Find Friends</h2>
+    <div className="px-4 sm:px-6 lg:px-8 w-full max-w-[1400px] mx-auto space-y-8 mt-6 pb-12">
+      <div className="max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6">Find Friends</h2>
       {/* Inline search bar styled like your app */}
       <input
         type="text"
@@ -115,7 +116,7 @@ const FriendsPage = () => {
                 </div>
                 <div>
                   {isFriend ? (
-                    <Link to={`/chat/${user._id}`} className="btn btn-primary">
+                    <Link to={`/chat/user/${user._id}`} className="btn btn-primary">
                       Message
                     </Link>
                   ) : (
@@ -134,7 +135,8 @@ const FriendsPage = () => {
         )}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default FriendsPage;

@@ -8,22 +8,77 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
     receiverId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String, // Handles both peer user ID and group streamChannelId!
       required: true,
+      index: true,
     },
     message: {
       type: String,
-      required: true,
+      default: "",
     },
     isRead: {
       type: Boolean,
       default: false,
     },
+    streamMessageId: {
+      type: String,
+      sparse: true,
+      index: true,
+    },
+    attachments: [
+      {
+        type: String,
+      },
+    ],
+    parentMessageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message",
+      default: null,
+      index: true,
+    },
+    streamParentId: {
+      type: String,
+      default: null,
+      index: true,
+    },
+    isEdited: {
+      type: Boolean,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    deletedForUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    reactions: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        emoji: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-const Message = mongoose.model("Message", messageSchema);
+messageSchema.index({ senderId: 1, receiverId: 1, createdAt: -1 });
+messageSchema.index({ receiverId: 1, senderId: 1, isDeleted: 1, createdAt: -1 });
+messageSchema.index({ message: "text" }); // 🚀 Scalable MongoDB Text Search Indexing
 
-export default Message; 
+const Message = mongoose.model("Message", messageSchema);
+export default Message;

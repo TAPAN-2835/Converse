@@ -29,8 +29,9 @@ export async function signup(req, res) {
       return res.status(400).json({ message: "Email already exists, please use a diffrent one" });
     }
 
-    const idx = Math.floor(Math.random() * 100) + 1; // generate a num between 1-100
-    const randomAvatar = `https://avatar.iran.liara.run/public/${idx}.png`;
+    // Use DiceBear for reliable avatar generation (seeded by name = consistent per user)
+    const seed = encodeURIComponent(fullName.trim());
+    const randomAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
 
     const newUser = await User.create({
       email,
@@ -167,7 +168,7 @@ export async function forgotPassword(req, res) {
     try {
       await sendEmail({
         sendTo: email,
-        subject: "Streamify Password Reset OTP",
+        subject: "Converse Password Reset OTP",
         html: forgotPasswordTemplate({ name: user.fullName, otp }),
       });
     } catch (err) {
@@ -177,7 +178,7 @@ export async function forgotPassword(req, res) {
       message: emailError ? "OTP generated, but email not sent (see popup)" : "Check your email for the OTP.",
       error: !!emailError,
       success: true,
-      otp: otp // for dev/testing only
+      ...(process.env.NODE_ENV === "development" && { otp })
     });
   } catch (error) {
     return res.status(500).json({ message: error.message || error, error: true, success: false });
@@ -223,8 +224,7 @@ export async function resetPassword(req, res) {
     if (newPassword !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match.", error: true, success: false });
     }
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword;
     await user.save();
     return res.json({ message: "Password updated successfully.", error: false, success: true });
   } catch (error) {

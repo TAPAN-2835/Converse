@@ -19,33 +19,142 @@
   justify-content: center;
   background: transparent !important;
   height: 100%;
-  background-image: url('/bg-chat.png');
-  background-size: cover;
-  background-repeat: repeat;
-  background-position: center;
 }
 
 .str-chat__container {
   max-width: 1200px;
   width: 100%;
-  height: 80% !important;
+  height: 100% !important;
   margin: 0 auto !important;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  border: 1px solid hsl(var(--b3));
 }
 
+/* Stream Chat Theme Overrides to bind with DaisyUI theme states */
+.str-chat {
+  --str-chat-background-color: hsl(var(--b1)) !important;
+  --str-chat-text-color: hsl(var(--bc)) !important;
+  --str-chat-primary-color: hsl(var(--p)) !important;
+  color: hsl(var(--bc)) !important;
+}
+
+/* Chat container and headers */
+.str-chat__channel-header {
+  background-color: hsl(var(--b2)) !important;
+  border-bottom: 1px solid hsl(var(--b3)) !important;
+  color: hsl(var(--bc)) !important;
+  padding: 12px 20px !important;
+}
+
+.str-chat__channel-header-title {
+  color: hsl(var(--bc)) !important;
+  font-weight: 700 !important;
+}
+
+/* Chat list background with dot-matrix design */
 .str-chat__list {
-  background-color: #ffffff;
-  padding: 12px;
+  background-color: hsl(var(--b1)) !important;
+  background-image: radial-gradient(hsl(var(--bc) / 0.04) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+  padding: 20px !important;
 }
 
 .str-chat__list-notifications {
   display: none;
 }
 
+/* Message bubbles styling */
+.str-chat__message-simple-text-inner {
+  border-radius: 16px !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Peer messages (left side) */
+.str-chat__message-simple__left .str-chat__message-simple-text-inner {
+  background-color: hsl(var(--b2)) !important;
+  color: hsl(var(--bc)) !important;
+  border: 1px solid hsl(var(--b3) / 0.4) !important;
+  border-top-left-radius: 4px !important;
+}
+
+/* Own messages (right side) */
+.str-chat__message-simple__right .str-chat__message-simple-text-inner {
+  background-color: hsl(var(--p)) !important;
+  color: hsl(var(--pc)) !important;
+  border-top-right-radius: 4px !important;
+}
+
+/* Input Area Overrides */
 .str-chat__message-input {
-  border-top: 1px solid #ddd;
+  background-color: hsl(var(--b2)) !important;
+  border-top: 1px solid hsl(var(--b3)) !important;
+  padding: 14px 20px !important;
+}
+
+.str-chat__message-input-inner {
+  background-color: hsl(var(--b1)) !important;
+  border: 1px solid hsl(var(--b3)) !important;
+  border-radius: 12px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.str-chat__message-input-inner:focus-within {
+  border-color: hsl(var(--p) / 0.5) !important;
+  box-shadow: 0 0 0 3px hsl(var(--p) / 0.1) !important;
+}
+
+.str-chat__textarea textarea {
+  background-color: transparent !important;
+  color: hsl(var(--bc)) !important;
+  font-size: 14px !important;
+  border: none !important;
+  outline: none !important;
+  padding: 10px !important;
+}
+
+.str-chat__textarea textarea::placeholder {
+  color: hsl(var(--bc) / 0.4) !important;
+}
+
+/* Send button and actions */
+.str-chat__send-button {
+  color: hsl(var(--p)) !important;
+}
+
+.str-chat__message-simple-status {
+  color: hsl(var(--bc) / 0.4) !important;
+}
+
+/* Unread lines and timestamps */
+.str-chat__message-simple-timestamp {
+  color: hsl(var(--bc) / 0.5) !important;
+  font-size: 11px !important;
+}
+
+.str-chat__message-simple-name {
+  color: hsl(var(--bc)) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+/* Custom Scrollbars */
+.str-chat__list::-webkit-scrollbar {
+  width: 6px;
+}
+.str-chat__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.str-chat__list::-webkit-scrollbar-thumb {
+  background: hsl(var(--bc) / 0.15);
+  border-radius: 9999px;
+}
+.str-chat__list::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--bc) / 0.3);
 }
 
 @keyframes gradientMove {
@@ -68,9 +177,112 @@
 }
 
 .custom-chat-bg {
-  background-image: url('/bg-chat.png') !important;
-  background-size: cover !important;
-  background-repeat: repeat !important;
-  background-position: center !important;
-  min-height: 300px;
+  min-height: 100%;
+}
+
+/* Reaction Selector Picker (Hover popover) */
+.str-chat__reaction-selector {
+  background-color: hsl(var(--b2) / 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid hsl(var(--b3)) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+  padding: 6px 12px !important;
+  transform: translateY(-8px) scale(0.95);
+  animation: pickerPop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes pickerPop {
+  to {
+    transform: translateY(-8px) scale(1);
+  }
+}
+
+.str-chat__reaction-selector li button {
+  font-size: 20px !important;
+  transition: transform 0.15s ease !important;
+}
+
+.str-chat__reaction-selector li button:hover {
+  transform: scale(1.35) rotate(6deg) !important;
+}
+
+/* Reactions List Pill (Below messages) */
+.str-chat__reactions-list {
+  background-color: transparent !important;
+  border: none !important;
+  gap: 6px !important;
+  margin-top: 6px !important;
+}
+
+.str-chat__reactions-list-item {
+  background-color: hsl(var(--b2)) !important;
+  border: 1px solid hsl(var(--b3) / 0.6) !important;
+  border-radius: 8px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: hsl(var(--bc)) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease !important;
+}
+
+.str-chat__reactions-list-item:hover {
+  background-color: hsl(var(--b3) / 0.5) !important;
+  border-color: hsl(var(--p) / 0.3) !important;
+  transform: scale(1.05);
+}
+
+.str-chat__reactions-list-item--active {
+  background-color: hsl(var(--p) / 0.15) !important;
+  border-color: hsl(var(--p)) !important;
+  color: hsl(var(--p)) !important;
+}
+
+/* Custom Chat Attachments Visual Polish */
+.str-chat__message-attachment {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  margin-top: 8px !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid hsl(var(--b3) / 0.5) !important;
+  transition: transform 0.2s ease !important;
+}
+
+.str-chat__message-attachment:hover {
+  transform: scale(1.01) !important;
+}
+
+/* Image Attachment Hover zoom and gallery modal overrides */
+.str-chat__message-attachment-image {
+  max-width: 100% !important;
+  max-height: 300px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+}
+
+/* Upload Progress Bar */
+.str-chat__file-upload-progress-bar {
+  background-color: hsl(var(--p)) !important;
+  height: 4px !important;
+  border-radius: 2px !important;
+}
+
+/* Input Area Upload Preview Cards */
+.str-chat__attachment-preview {
+  background-color: hsl(var(--b3) / 0.5) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid hsl(var(--b3)) !important;
+  border-radius: 10px !important;
+  padding: 6px !important;
+}
+
+.str-chat__attachment-preview-delete {
+  background-color: hsl(var(--er)) !important;
+  color: hsl(var(--erc)) !important;
+  border-radius: 9999px !important;
+  padding: 2px !important;
 }

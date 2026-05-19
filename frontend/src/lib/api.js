@@ -108,3 +108,167 @@ export const resetPassword = async (data) => {
   const response = await axiosInstance.post("/auth/reset-password", data);
   return response.data;
 };
+
+export const addReactionToBackend = async (reactionData) => {
+  const response = await axiosInstance.post("/chat/reactions", reactionData);
+  return response.data;
+};
+
+export const removeReactionFromBackend = async (reactionData) => {
+  const response = await axiosInstance.post("/chat/reactions/remove", reactionData);
+  return response.data;
+};
+
+export const uploadAttachment = async (file) => {
+  const formData = new FormData();
+  const rawFile = file.file || file;
+  formData.append("file", rawFile);
+
+  const response = await axiosInstance.post("/chat/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const getMessagesHistoryFromBackend = async (targetUserId, cursor = "", limit = 20) => {
+  const response = await axiosInstance.get(`/chat/history`, {
+    params: {
+      targetUserId,
+      cursor,
+      limit
+    }
+  });
+  return response.data;
+};
+
+export const createGroupInBackend = async (groupData) => {
+  const response = await axiosInstance.post("/groups", groupData);
+  return response.data;
+};
+
+export const getUserGroupsFromBackend = async () => {
+  const response = await axiosInstance.get("/groups/my");
+  return response.data;
+};
+
+export const addGroupMemberInBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/add-member`, { userId });
+  return response.data;
+};
+
+export const removeGroupMemberFromBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/remove-member`, { userId });
+  return response.data;
+};
+
+export const updateGroupInBackend = async (groupId, groupData) => {
+  const response = await axiosInstance.patch(`/groups/${groupId}/update`, groupData);
+  return response.data;
+};
+
+export const deleteGroupInBackend = async (groupId) => {
+  const response = await axiosInstance.delete(`/groups/${groupId}/delete`);
+  return response.data;
+};
+
+export const pinMessageInBackend = async (groupId, messageId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/pins`, { messageId });
+  return response.data;
+};
+
+export const unpinMessageFromBackend = async (groupId, messageId) => {
+  const response = await axiosInstance.delete(`/groups/${groupId}/pins/${messageId}`);
+  return response.data;
+};
+
+export const getGroupByIdFromBackend = async (groupId) => {
+  const response = await axiosInstance.get(`/groups/${groupId}`);
+  return response.data;
+};
+
+export const inviteMemberInBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/invite`, { userId });
+  return response.data;
+};
+
+export const acceptInviteInBackend = async (groupId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/accept-invite`);
+  return response.data;
+};
+
+export const rejectInviteInBackend = async (groupId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/reject-invite`);
+  return response.data;
+};
+
+export const requestJoinInBackend = async (groupId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/request-join`);
+  return response.data;
+};
+
+export const approveRequestInBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/approve-request`, { userId });
+  return response.data;
+};
+
+export const removeMemberInBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/remove-member`, { userId });
+  return response.data;
+};
+
+export const leaveGroupInBackend = async (groupId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/leave`);
+  return response.data;
+};
+
+export const promoteToAdminInBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/promote`, { userId });
+  return response.data;
+};
+
+export const demoteFromAdminInBackend = async (groupId, userId) => {
+  const response = await axiosInstance.post(`/groups/${groupId}/demote`, { userId });
+  return response.data;
+};
+
+export const syncMessageToBackend = async (messageData) => {
+  const response = await axiosInstance.post("/chat/message/sync", messageData);
+  return response.data;
+};
+
+export const editMessageInBackend = async (streamMessageId, newMessage) => {
+  const response = await axiosInstance.put(`/chat/message/${streamMessageId}`, { newMessage });
+  return response.data;
+};
+
+export const deleteMessageInBackend = async (streamMessageId, deleteType = "everyone") => {
+  const response = await axiosInstance.post(`/chat/message/${streamMessageId}/delete`, { deleteType });
+  return response.data;
+};
+
+export const getNotificationsFromBackend = async () => {
+  const response = await axiosInstance.get("/users/notifications");
+  return response.data;
+};
+
+export const markNotificationsAsReadInBackend = async (notificationIds = []) => {
+  const response = await axiosInstance.put("/users/notifications/read", { notificationIds });
+  return response.data;
+};
+
+export const registerFcmTokenInBackend = async (fcmToken) => {
+  const response = await axiosInstance.post("/users/notifications/fcm-token", { fcmToken });
+  return response.data;
+};
+
+export const updateNotificationPreferencesInBackend = async (prefs) => {
+  const response = await axiosInstance.put("/users/notifications/preferences", prefs);
+  return response.data;
+};
+
+export const searchConverse = async (query, type = "all") => {
+  const response = await axiosInstance.get(`/search?q=${encodeURIComponent(query)}&type=${type}`);
+  return response.data;
+};

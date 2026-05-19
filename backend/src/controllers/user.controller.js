@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import FriendRequest from "../models/FriendRequest.js";
+import { notificationService } from "../lib/notification.js";
 
 export async function getRecommendedUsers(req, res) {
   try {
@@ -72,6 +73,16 @@ export async function sendFriendRequest(req, res) {
       recipient: recipientId,
     });
 
+    // 🚀 Dispatch Real-time Notification
+    await notificationService.createAndSendNotification({
+      recipientId: recipientId,
+      senderId: myId,
+      type: "friend_request",
+      title: "New Friend Request",
+      body: `${req.user.fullName} sent you a friend request.`,
+      payload: { actionUrl: "/notifications" }
+    }).catch(err => console.error("Realtime notification dispatch failed:", err));
+
     res.status(201).json(friendRequest);
   } catch (error) {
     console.error("Error in sendFriendRequest controller", error.message);
@@ -106,6 +117,16 @@ export async function acceptFriendRequest(req, res) {
     await User.findByIdAndUpdate(friendRequest.recipient, {
       $addToSet: { friends: friendRequest.sender },
     });
+
+    // 🚀 Dispatch Real-time Acceptance Notification
+    await notificationService.createAndSendNotification({
+      recipientId: friendRequest.sender,
+      senderId: req.user.id,
+      type: "friend_accept",
+      title: "Friend Request Accepted",
+      body: `${req.user.fullName} accepted your friend request!`,
+      payload: { actionUrl: "/" }
+    }).catch(err => console.error("Realtime notification dispatch failed:", err));
 
     res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {

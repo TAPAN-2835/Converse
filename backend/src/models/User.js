@@ -47,6 +47,20 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    fcmTokens: [
+      {
+        type: String,
+        default: [],
+      },
+    ],
+    notificationPreferences: {
+      type: Object,
+      default: {
+        dms: true,
+        groups: true,
+        mentions: true,
+      },
+    },
   },
   { timestamps: true }
 );

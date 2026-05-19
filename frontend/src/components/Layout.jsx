@@ -10,7 +10,7 @@ const Layout = ({ children, showSidebar = false }) => {
 
   return (
     <div className="min-h-screen">
-      <Navbar onSidebarToggle={handleSidebarToggle} />
+      <Navbar onSidebarToggle={handleSidebarToggle} showSidebar={showSidebar} />
       <div className="flex">
         {/* Sidebar for large screens */}
         {showSidebar && <Sidebar className="hidden lg:flex" />}
